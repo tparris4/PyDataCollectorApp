@@ -31,11 +31,16 @@ def success():
         height = request.form["height_name"]
         print(email, height)
         # email field is equal to email variable
-        if db.session.query(Data).filter(Data.email_ == email):
+        # will return 1 or 0
+
+        # if 0, email does not exist in db, store it there
+        if db.session.query(Data).filter(Data.email_ == email).count() == 0:
             data = Data(email, height)
             db.session.add(data)
             db.session.commit()
             return render_template("success.html")
+        return render_template('index.html',
+                               text="Seems like we've already got that email address")
 
 
 if __name__ == '__main__':
